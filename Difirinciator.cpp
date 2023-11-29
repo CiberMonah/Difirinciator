@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include "Difirinciator.h"
 
 void free_tree(NODE* node) {
@@ -29,7 +30,7 @@ tree_err_type op_new(NODE** node, Arg_t arg_t, Elem_t value) {
         return TREE_MEM_ALLOC_ERR;
     }
 
-    printf("in func - %p\n", node);
+    //printf("in func - %p\n", node);
     
     (*node)->arg_type = arg_t;
     (*node)->data = value;
@@ -49,12 +50,58 @@ void tree_init(NODE** node) {
 //In this program we only need print "in order"
 void print_tree (FILE* out, NODE* node) {
      if(!node) {
-        fprintf(out, "nil ");
         return;
     }
-    fprintf(out, "( ");
     print_tree(out, node->left);
-    fprintf(out, format, node->data);
+    if(node->arg_type == OPERATION) {
+        switch(node->data) {
+            case ADD_COMAND:
+                fprintf(out, "+ ");
+                break;
+            case SUP_COMAND:
+                fprintf(out, "- ");
+                break;
+            case MUL_COMAND:
+                fprintf(out, "* ");
+                break;
+            case DIV_COMAND:
+                fprintf(out, "/ ");
+                break;
+            default:
+                break;
+        }
+    } else {
+        fprintf(out, format, node->data);
+    }
     print_tree(out, node->right);
-    fprintf(out, ") ");
+}
+
+
+Elem_t Eval_tree (NODE* node) {
+    if(!node)
+        return 0;
+    if(node->arg_type == NUMBER) 
+        return node->data;
+    Elem_t left = Eval_tree(node->left);
+    Elem_t right = Eval_tree(node->right);
+    switch (node->data)
+    {
+    case ADD_COMAND:
+        return left + right;
+        break;
+    case SUP_COMAND:
+        return left - right;
+        break;
+    case MUL_COMAND:
+        return left * right;
+        break;
+    case DIV_COMAND:
+        if(right == 0)
+            return 0;
+        return left / right;
+    default:
+        break;
+    }
+
+    return 123123;
 }

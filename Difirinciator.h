@@ -39,5 +39,6 @@ void tree_init(NODE** node);
 void free_tree(NODE* node);
 tree_err_type op_new(NODE** node, Arg_t arg_t, Elem_t value);
 void print_tree (FILE* out, NODE* node);
+Elem_t Eval_tree (NODE* node);
 
 #endif

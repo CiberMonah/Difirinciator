@@ -10,12 +10,14 @@ int main() {
 
     printf("Programm started\n");
     op_new(&node, OPERATION, ADD_COMAND);
-    printf("pointer - %p value - %d\n", &node, node->data);
+    //printf("pointer - %p value - %d\n", &node, node->data);
     op_new(&node->left, NUMBER, 2);
 
     op_new(&node->right, NUMBER, 3);
 
     print_tree(stdout, node);
+
+    printf("= %d\n", Eval_tree(node));
 
     free_tree(node);
 }
