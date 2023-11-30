@@ -84,6 +84,7 @@ void print_tree (FILE* out, NODE* node) {
     print_tree(out, node->right);
 }
 
+Elem_t var_value = -999;
 
 Elem_t Eval_tree (NODE* node) {
     if(!node)
@@ -91,12 +92,14 @@ Elem_t Eval_tree (NODE* node) {
     if(node->arg_type == NUMBER) {
         return node->data;
     } if(node->arg_type == VAR) {
-        Elem_t var_val = 0;
-        printf("\nInput X value:\n");
-        scanf("%d", &var_val);
-        node->data = var_val;
+        if(var_value == -999) {
+            printf("\nInput X value:\n");
+            scanf("%d", &var_value);
+        }
 
-        return var_val;
+        node->data = var_value;
+
+        return var_value;
     }
 
     Elem_t left = Eval_tree(node->left);
@@ -124,8 +127,79 @@ Elem_t Eval_tree (NODE* node) {
     return 0;
 }
 
-void difirinciate_expression (NODE* node) {
+NODE* difirinciate_expression(NODE* node) {
+    NODE* temp = {};
 
+    if(!node)
+        return nullptr;
+
+    if(node->arg_type == NUMBER) {
+        op_new(&temp, NUMBER, 0);
+
+        return temp;
+    }
+
+    if(node->arg_type == VAR) {
+        op_new(&temp, NUMBER, 1);
+
+        return temp;
+    }
+
+    if(node->arg_type == OPERATION) {
+        switch (node->data)
+        {
+        case ADD_COMAND:
+            op_new(&temp, OPERATION, ADD_COMAND);
+
+            temp->left = difirinciate_expression(node->left);
+            temp->right = difirinciate_expression(node->right);
+
+            return temp;
+            break;
+        case SUP_COMAND:
+            op_new(&temp, OPERATION, SUP_COMAND);
+
+            temp->left = difirinciate_expression(node->left);
+            temp->right = difirinciate_expression(node->right);
+
+            return temp;
+            break;
+        case MUL_COMAND:
+            op_new(&temp, OPERATION, ADD_COMAND);
+            op_new(&temp->left, OPERATION, MUL_COMAND);
+
+            (temp->left)->left = difirinciate_expression(node->left);
+            (temp->left)->right = node->right;
+
+            op_new(&temp->right, OPERATION, MUL_COMAND);
+
+            (temp->right)->left = difirinciate_expression(node->right);
+            (temp->right)->right = node->left;
+
+            return temp;
+            break;
+        case DIV_COMAND:    //(da * b - db * a) / (b * b)
+            op_new(&temp, OPERATION, DIV_COMAND);
+
+            op_new(&temp->right, OPERATION, MUL_COMAND);
+            (temp->right)->right = node->right;
+            (temp->right)->left = node->right;
+
+            op_new(&temp->left, OPERATION, SUP_COMAND);
+
+            op_new(&((temp->left)->left), OPERATION, MUL_COMAND);
+            op_new(&((temp->left)->right), OPERATION, MUL_COMAND);
+            ((temp->left)->left)->left = difirinciate_expression(node->left);
+            ((temp->left)->left)->right = node->right;
+            ((temp->left)->right)->left = difirinciate_expression(node->right);
+            ((temp->left)->right)->right = node->left;
+
+            return temp;
+        default:    
+            break;
+        }
+    }
+    return nullptr;
 }
 
 
