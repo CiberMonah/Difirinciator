@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Difirinciator.h"
+#include "Dump_difirinciator.h"
 
 
 int main() {
@@ -16,6 +17,10 @@ int main() {
     op_new(&node->right, NUMBER, 3);
 
     print_tree(stdout, node);
+
+    int counter = 0;
+
+    make_png_dump("dif.dot", node, &counter);
 
     printf("= %d\n", Eval_tree(node));
 

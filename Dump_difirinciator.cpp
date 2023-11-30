@@ -11,7 +11,27 @@ static void dot_dump(FILE* file, NODE* node, int* counter) {
 	int counter_now = *counter;
 
 	if (node != 0) {
-		fprintf(file, "\tNode_%d [label = \"%d\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter), node->data);
+		if(node->arg_type == OPERATION) {
+			switch(node->data) {
+				case ADD_COMAND:
+					fprintf(file, "\tNode_%d [label = \"+\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter));
+					break;
+				case SUP_COMAND:
+					fprintf(file, "\tNode_%d [label = \"-\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter));
+					break;
+				case MUL_COMAND:
+					fprintf(file, "\tNode_%d [label = \"*\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter));
+					break;
+				case DIV_COMAND:
+					fprintf(file, "\tNode_%d [label = \"/\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter));
+					break;
+				default:
+					break;
+			}
+		} else { 
+			fprintf(file, "\tNode_%d [label = \"%d\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter), node->data);
+		}
+
 		if (node->left != 0) {
 			fprintf(file, "\tNode_%d -> Node_%d\n", counter_now, (*counter) + 1);
 			(*counter)++;
@@ -39,5 +59,5 @@ void make_png_dump(const char* file_name , NODE* node, int* counter) {
 
 	fclose(dot_file);
 
-	system("dot tree.dot -T png -o tree.png");
+	system("dot dif.dot -T png -o dif.png");
 }
