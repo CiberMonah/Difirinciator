@@ -58,6 +58,8 @@ static void dot_dump(FILE* file, NODE* node, int* counter) {
 				default:
 					break;
 			}
+		} else if (node->arg_type == VAR) {
+			fprintf(file, "\tNode_%d [label = \"X(%d)\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter), node->data);
 		} else { 
 			fprintf(file, "\tNode_%d [label = \"%d\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter), node->data);
 		}
@@ -92,7 +94,9 @@ void make_png_dump(const char* file_name , NODE* node, int* counter) {
 
 	char comand[MAX_FILE_NAME] = "dot  -T png -o dif.png";
 
-	str_insert(comand, file_name, MAX_FILE_NAME, 4); //4 is position to insert file_name in comand
+	str_insert(comand, file_name, MAX_FILE_NAME, 4);			//4 is position to insert file_name in comand
+
+	
 
 	system(comand);
 }

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #include "Difirinciator.h"
 
 void free_tree(NODE* node) {
@@ -33,7 +34,10 @@ tree_err_type op_new(NODE** node, Arg_t arg_t, Elem_t value) {
     //printf("in func - %p\n", node);
     
     (*node)->arg_type = arg_t;
-    (*node)->data = value;
+    if((*node)->arg_type == VAR) 
+        (*node)->data = 0;
+    else
+        (*node)->data = value;
     (*node)->left = nullptr;
     (*node)->right = nullptr;
 
@@ -52,7 +56,9 @@ void print_tree (FILE* out, NODE* node) {
      if(!node) {
         return;
     }
+
     print_tree(out, node->left);
+
     if(node->arg_type == OPERATION) {
         switch(node->data) {
             case ADD_COMAND:
@@ -70,6 +76,8 @@ void print_tree (FILE* out, NODE* node) {
             default:
                 break;
         }
+    } else if(node->arg_type == VAR) {
+        fprintf(out, "X ");
     } else {
         fprintf(out, format, node->data);
     }
@@ -80,10 +88,20 @@ void print_tree (FILE* out, NODE* node) {
 Elem_t Eval_tree (NODE* node) {
     if(!node)
         return 0;
-    if(node->arg_type == NUMBER) 
+    if(node->arg_type == NUMBER) {
         return node->data;
+    } if(node->arg_type == VAR) {
+        Elem_t var_val = 0;
+        printf("\nInput X value:\n");
+        scanf("%d", &var_val);
+        node->data = var_val;
+
+        return var_val;
+    }
+
     Elem_t left = Eval_tree(node->left);
     Elem_t right = Eval_tree(node->right);
+
     switch (node->data)
     {
     case ADD_COMAND:
@@ -105,3 +123,69 @@ Elem_t Eval_tree (NODE* node) {
 
     return 0;
 }
+
+void difirinciate_expression (NODE* node) {
+
+}
+
+
+
+// Elem_t parsing_operation(char* str) {
+//     if(strcmp(str, "+") == 0) {
+//         return ADD_COMAND;
+//     } else if (strcmp(str, "-") == 0) {
+//         return SUP_COMAND;
+//     } else if (strcmp(str, "*") == 0) {
+//         return MUL_COMAND;
+//     } else if (strcmp(str, "/") == 0) {
+//         return DIV_COMAND;
+//     }
+// }
+
+// static tree_err_type parse_data(FILE* fp, NODE** root) {
+//     if(root == nullptr) 
+//         return TREE_NO_ERR;
+
+//     const int MAX_WORD_LEN = 50;
+//     char word[MAX_WORD_LEN] = "";
+//     Elem_t argumnet = ;
+    
+//     //fscanf(fp, format, word);
+//     fscanf(fp, "%s", word);   //Reading '('
+
+//     if(strcmp(word, "(") != 0)
+//         printf("IS - ( - %s\n", word);
+
+//     if(strcmp(word, "(") == 0) {
+//         //fscanf(fp, format, word);
+//         //fprintf(dump_file, "read root: %s\n", word);
+//         op_new(root, comand);
+//         fprintf(dump_file, "parsing left tree...%s\n", word);
+//         parse_data(fp, dump_file, &((*root)->left));
+//         fprintf(dump_file, "parsing right tree...%s\n", word);
+//         parse_data(fp, dump_file, &((*root)->right));
+//         fprintf(dump_file, "finished parsing %s\n", word);
+//         fscanf(fp, "%s ", word);
+//         //read_word(word, MAX_WORD_LEN, fp);
+//     } else if (strcmp(word, "nil") == 0) {
+//         *root = nullptr;
+//         return TREE_NO_ERR;
+//     } else {
+//         return TREE_NO_ERR;
+//     }
+//     return TREE_NO_ERR;
+// }
+
+// void read_expression(const char* file_name, NODE** node) {
+//     FILE* fp = nullptr;
+
+//     if((fp = fopen(file_name, "r")) == nullptr) {
+//         return;
+//     }
+
+//     parse_data(fp, node);
+
+//     printf("Loaded succesful\n");
+
+//     return;
+// }
