@@ -28,6 +28,8 @@ int main() {
 
     dif_node = difirinciate_expression(node);
 
+    make_png_dump("src_tree.dot", node, &counter);
+
     make_png_dump("dif.dot", dif_node, &counter);
 
     free_tree(node);

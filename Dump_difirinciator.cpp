@@ -77,6 +77,8 @@ static void dot_dump(FILE* file, NODE* node, int* counter) {
 	}
 }
 
+char NUMBER_OF_DUMP_PNG = 'A';
+
 void make_png_dump(const char* file_name , NODE* node, int* counter) {
 	FILE* dot_file = nullptr;
 	const int MAX_FILE_NAME = 255;
@@ -92,11 +94,17 @@ void make_png_dump(const char* file_name , NODE* node, int* counter) {
 
 	fclose(dot_file);
 
-	char comand[MAX_FILE_NAME] = "dot  -T png -o dif.png";
+	char comand[MAX_FILE_NAME] = "dot  -T png -o  .png";
 
 	str_insert(comand, file_name, MAX_FILE_NAME, 4);			//4 is position to insert file_name in comand
+	int i = 0;
 
-	
+	while(comand[i] != '\0')i++;
+
+	comand[i-5] = NUMBER_OF_DUMP_PNG;
+	NUMBER_OF_DUMP_PNG++;
+
+	printf("%s\n", comand);
 
 	system(comand);
 }
