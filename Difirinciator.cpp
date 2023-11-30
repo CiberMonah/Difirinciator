@@ -103,5 +103,5 @@ Elem_t Eval_tree (NODE* node) {
         break;
     }
 
-    return 123123;
+    return 0;
 }
