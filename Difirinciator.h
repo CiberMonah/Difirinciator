@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 typedef int Elem_t;
-#define format "%d "
+#define format "%d"
 
 enum Arg_t {
     NUMBER      = 1 << 1,
@@ -42,5 +42,6 @@ void print_tree (FILE* out, NODE* node);
 Elem_t Eval_tree (NODE* node);
 
 NODE* difirinciate_expression(NODE* node);
+void simple_tree(NODE* node);
 
 #endif

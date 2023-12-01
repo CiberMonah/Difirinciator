@@ -59,7 +59,7 @@ static void dot_dump(FILE* file, NODE* node, int* counter) {
 					break;
 			}
 		} else if (node->arg_type == VAR) {
-			fprintf(file, "\tNode_%d [label = \"X(%d)\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter), node->data);
+			fprintf(file, "\tNode_%d [label = \"X\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter));
 		} else { 
 			fprintf(file, "\tNode_%d [label = \"%d\", shape = \"ellipse\", style = \"filled\", fillcolor = \"#1f77b4\"]\n", (*counter), node->data);
 		}

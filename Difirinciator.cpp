@@ -57,6 +57,7 @@ void print_tree (FILE* out, NODE* node) {
         return;
     }
 
+    printf("( ");
     print_tree(out, node->left);
 
     if(node->arg_type == OPERATION) {
@@ -77,11 +78,12 @@ void print_tree (FILE* out, NODE* node) {
                 break;
         }
     } else if(node->arg_type == VAR) {
-        fprintf(out, "X ");
+        fprintf(out, "X");
     } else {
         fprintf(out, format, node->data);
     }
     print_tree(out, node->right);
+    printf(" ) ");
 }
 
 Elem_t var_value = -999;
@@ -202,7 +204,42 @@ NODE* difirinciate_expression(NODE* node) {
     return nullptr;
 }
 
+void simple_tree(NODE* node) {
+    if(!node)
+        return;
+    if(node->arg_type != OPERATION)
+        return;
+    switch (node->data)
+    {
+    case ADD_COMAND:
+        if(node->left->arg_type == NUMBER && node->left->data == 0) {
+            node->arg_type = node->right->arg_type;
+            simple_tree(node->right);
+            node->data = node->right->data;
+            free(node->left);
+            free(node->right);
+            node->left = nullptr;
+            node->right = nullptr;
+        } else if (node->right->arg_type == NUMBER && node->right->data == 0) {
+            node->arg_type = node->left->arg_type;
+            simple_tree(node->left);
+            node->data = node->left->data;
+            free(node->left);
+            free(node->right);
+            node->left = nullptr;
+            node->right = nullptr;
+        }
+        break;
+    case MUL_COMAND:
+    
+        break;
+    default:
+        break;
+    }
 
+    simple_tree(node->left);
+    simple_tree(node->right);
+}
 
 // Elem_t parsing_operation(char* str) {
 //     if(strcmp(str, "+") == 0) {

@@ -3,18 +3,19 @@
 #include "Difirinciator.h"
 #include "Dump_difirinciator.h"
 
-
 int main() {
     NODE* node;
     
     tree_init(&node);
 
     printf("Programm started\n");
-    op_new(&node, OPERATION, DIV_COMAND);
-    //printf("pointer - %p value - %d\n", &node, node->data);
-    op_new(&node->left, NUMBER, 1);
+    op_new(&node, OPERATION, ADD_COMAND);
+    op_new(&node->left, VAR, 0);
+    
 
-    op_new(&node->right, VAR, 2);
+    op_new(&node->right, OPERATION, ADD_COMAND);
+    op_new(&node->right->right, NUMBER, 5);
+    op_new(&node->right->left, VAR, 1);
 
     print_tree(stdout, node);
 
@@ -30,7 +31,11 @@ int main() {
 
     make_png_dump("src_tree.dot", node, &counter);
 
+    simple_tree(dif_node);
+
     make_png_dump("dif.dot", dif_node, &counter);
+
+    printf("Eval dif = %d\n", Eval_tree(dif_node));
 
     free_tree(node);
 }
