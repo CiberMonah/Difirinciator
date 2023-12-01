@@ -42,6 +42,6 @@ void print_tree (FILE* out, NODE* node);
 Elem_t Eval_tree (NODE* node);
 
 NODE* difirinciate_expression(NODE* node);
-void simple_tree(NODE* node);
+void simple_tree(NODE** node);
 
 #endif

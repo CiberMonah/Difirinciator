@@ -204,41 +204,51 @@ NODE* difirinciate_expression(NODE* node) {
     return nullptr;
 }
 
-void simple_tree(NODE* node) {
-    if(!node)
+void simple_tree(NODE** node) {
+    if(!*node)
         return;
-    if(node->arg_type != OPERATION)
+
+    if((*node)->arg_type != OPERATION)
         return;
-    switch (node->data)
+    switch ((*node)->data)
     {
     case ADD_COMAND:
-        if(node->left->arg_type == NUMBER && node->left->data == 0) {
-            node->arg_type = node->right->arg_type;
-            simple_tree(node->right);
-            node->data = node->right->data;
-            free(node->left);
-            free(node->right);
-            node->left = nullptr;
-            node->right = nullptr;
-        } else if (node->right->arg_type == NUMBER && node->right->data == 0) {
-            node->arg_type = node->left->arg_type;
-            simple_tree(node->left);
-            node->data = node->left->data;
-            free(node->left);
-            free(node->right);
-            node->left = nullptr;
-            node->right = nullptr;
+        simple_tree(&(*node)->left);
+        if((*node)->left->arg_type == NUMBER && (*node)->left->data == 0) {
+            (*node)->arg_type = (*node)->right->arg_type;
+            (*node) = (*node)->right;
+            return;
+        } else if ((*node)->right->arg_type == NUMBER && (*node)->right->data == 0) {
+            (*node)->arg_type = (*node)->left->arg_type;
+            (*node) = (*node)->left;
+            return;
         }
         break;
     case MUL_COMAND:
-    
+        if((*node)->left->arg_type == NUMBER && (*node)->left->data == 0) {
+            (*node)->arg_type = NUMBER;
+            simple_tree(&(*node)->right);
+            (*node)->data = 0;
+            free((*node)->left);
+            free((*node)->right);
+            (*node)->left = nullptr;
+            (*node)->right = nullptr;
+        } else if ((*node)->right->arg_type == NUMBER && (*node)->right->data == 0) {
+            (*node)->arg_type = NUMBER;
+            simple_tree(&(*node)->left);
+            (*node)->data = 0;
+            free((*node)->left);
+            free((*node)->right);
+            (*node)->left = nullptr;
+            (*node)->right = nullptr;
+        }
         break;
     default:
         break;
-    }
-
-    simple_tree(node->left);
-    simple_tree(node->right);
+    }   
+    
+    simple_tree(&(*node)->left);
+    simple_tree(&(*node)->right);
 }
 
 // Elem_t parsing_operation(char* str) {

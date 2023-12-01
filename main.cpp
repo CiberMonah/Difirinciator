@@ -9,13 +9,13 @@ int main() {
     tree_init(&node);
 
     printf("Programm started\n");
-    op_new(&node, OPERATION, ADD_COMAND);
+    op_new(&node, OPERATION, MUL_COMAND);
     op_new(&node->left, VAR, 0);
     
 
-    op_new(&node->right, OPERATION, ADD_COMAND);
-    op_new(&node->right->right, NUMBER, 5);
-    op_new(&node->right->left, VAR, 1);
+    //op_new(&node->right, OPERATION, ADD_COMAND);
+    op_new(&node->right, NUMBER, 5);
+    //op_new(&node->right->left, VAR, 1);
 
     print_tree(stdout, node);
 
@@ -31,7 +31,7 @@ int main() {
 
     make_png_dump("src_tree.dot", node, &counter);
 
-    simple_tree(dif_node);
+    simple_tree(&dif_node);
 
     make_png_dump("dif.dot", dif_node, &counter);
 
