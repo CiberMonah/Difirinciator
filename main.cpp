@@ -9,7 +9,18 @@ int main() {
     
     tree_init(&node);
 
-    node = Get_G("2+3");
+    FILE* expression = nullptr;
+
+    if(!(expression = fopen("expression.txt", "r")))
+        return -1;
+
+    char str[MAX_LEN_OF_EXPRESSION] = {};
+
+    fscanf(expression,"%s", str);
+
+    node = Get_G(str);
+
+    printf("%s = %d\n", str, Eval_tree(node));
 
     int counter = 0;
 

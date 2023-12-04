@@ -1,6 +1,5 @@
 *.save
 *.cpp.save
-*.txt
 *.exe
 *.dot
 *.png

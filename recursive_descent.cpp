@@ -30,13 +30,13 @@ NODE* Get_E() {
    
     
     NODE* new_node1 = Get_T();
+    NODE* op_node = 0;
+
     char op = 0;
 
     while(s[p] == '+' || s[p] == '-') {
         op = s[p];
         p++;
-
-        NODE* op_node = 0;
 
         NODE* new_node2 = Get_T();
 
@@ -46,19 +46,20 @@ NODE* Get_E() {
             op_new(&op_node, OPERATION, ADD_COMAND);
             op_node->left = new_node1;
             op_node->right = new_node2;
-            return op_node;
+            new_node1 = op_node;
             break;
         case '-':
             op_new(&op_node, OPERATION, SUP_COMAND);
             op_node->left = new_node1;
             op_node->right = new_node2;
-            return op_node;
+            new_node1 = op_node;
             break;
         default:
             err;
             break;
         }
     }
+
     return new_node1;
 }
 
@@ -81,19 +82,20 @@ NODE* Get_T() {
             op_new(&op_node, OPERATION, MUL_COMAND);
             op_node->left = new_node1;
             op_node->right = new_node2;
-            return op_node;
+            new_node1 =  op_node;
             break;
         case '/':
             op_new(&op_node, OPERATION, DIV_COMAND);
             op_node->left = new_node1;
             op_node->right = new_node2;
-            return op_node;
+            new_node1 =  op_node;
             break;
         default:
             err;
             break;
         }
     }
+
     return new_node1;
 }
 
@@ -106,7 +108,20 @@ NODE* Get_P() {
         node = Get_E();
         p++;
         return node;
+    } else if (s[p] > 'A' && s[p] < 'Z') {
+        return Get_Id();
     } else {
         return Get_N();
     }
+}
+
+NODE* Get_Id() {
+    NODE* node;
+
+    if(s[p] > 'A' && s[p] < 'Z') {
+        op_new(&node, VAR, 0);
+        p++;
+    }
+
+    return node;
 }
