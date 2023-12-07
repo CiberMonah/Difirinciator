@@ -19,13 +19,20 @@ struct NODE {
     NODE* right;
 };
 
-//This about values if it is OPERATION value
-
+// This about values if it is OPERATION value
+// Operators
 const Elem_t ADD_COMAND = 1 << 1;
 const Elem_t SUP_COMAND = 1 << 2;
 const Elem_t MUL_COMAND = 1 << 3;
 const Elem_t DIV_COMAND = 1 << 4;
-const Elem_t LOG_COMAND = 1 << 5;
+
+//This added for lexem_analys
+const Elem_t OBR_COMAND = 1 << 5;
+const Elem_t CBR_COMAND = 1 << 6;
+
+//Functions that need to be parsed not by 1 symbol
+const Elem_t LOG_COMAND = 1 << 7;
+
 
 enum tree_err_type {
     TREE_NO_ERR           = 0,

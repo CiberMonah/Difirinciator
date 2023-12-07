@@ -3,7 +3,26 @@
 const char* s;
 int p = 0;
 
+//static void skip_spaces() {
+    // int old_p = p;
+
+    // while (s[p] == ' ')
+    //     p++;
+
+    // if(old_p == p) {
+    //     printf("s[p] - %c\n", s[p]);
+    //     return;
+    // }
+    // else {
+    //     p++;
+    //     p++;
+    //     printf("s[p] - %c\n", s[p]);
+    // }
+//}
+
 NODE* Get_N() {
+    //skip_spaces();
+
     int val = 0;
     NODE* new_node = 0;
 
@@ -21,13 +40,15 @@ NODE* Get_G(const char* str) {
     s = str;
     p = 0;
 
+    //skip_spaces();
+
     NODE* new_node = Get_E();
 
     return new_node;
 }
 
 NODE* Get_E() {
-   
+    //skip_spaces(); 
     
     NODE* new_node1 = Get_T();
     NODE* op_node = 0;
@@ -65,6 +86,8 @@ NODE* Get_E() {
 
 
 NODE* Get_T() {
+    //skip_spaces();
+
     NODE* new_node1 = Get_P();
     char op = 0;
 
@@ -101,6 +124,8 @@ NODE* Get_T() {
 
 
 NODE* Get_P() {
+    //skip_spaces();
+
     NODE* node = 0;
 
     if(s[p] == '(') {
@@ -116,6 +141,8 @@ NODE* Get_P() {
 }
 
 NODE* Get_Id() {
+    //skip_spaces();
+
     NODE* node;
 
     if(s[p] > 'A' && s[p] < 'Z') {
