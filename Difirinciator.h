@@ -21,6 +21,8 @@ struct NODE {
 
 // This about values if it is OPERATION value
 // Operators
+const Elem_t END_COMAND = -1;
+
 const Elem_t ADD_COMAND = 1 << 1;
 const Elem_t SUP_COMAND = 1 << 2;
 const Elem_t MUL_COMAND = 1 << 3;

@@ -1,10 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "Difirinciator.h"
 #include "Lexems/lexems.h"
+#include "Difirinciator.h"
 #include "Dump_difirinciator.h"
-#include "recursive_descent.h"
 
 int main() {
     NODE* node;
@@ -26,11 +25,26 @@ int main() {
 
     NODE** lexem_arr = nullptr;
 
-    lexem_arr = lexem_analys(&buffer);
+    int number = 0;
+
+    lexem_arr = lexem_analys(&buffer, &number);
 
     //printf("%p\n", lexem_arr);
 
-    print_lexems(lexem_arr);
+    print_lexems(lexem_arr, number);
+
+    LEXEM_ARR arr = {};
+    arr.lexem_arr = lexem_arr;
+    arr.ptr = 0;
+
+    printf("%p\n", node);
+    node = Get_G(&arr);
+
+    
+
+    int counter = 0;
+
+    make_png_dump("src_tree.dot", node, &counter);
 
     free(lexem_arr);
 
