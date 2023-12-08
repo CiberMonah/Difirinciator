@@ -37,10 +37,9 @@ int main() {
     arr.lexem_arr = lexem_arr;
     arr.ptr = 0;
 
-    printf("%p\n", node);
     node = Get_G(&arr);
 
-    
+    printf("%p\n", node);
 
     int counter = 0;
 

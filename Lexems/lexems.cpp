@@ -4,8 +4,10 @@
 const int MAX_LEXEM_NUMBER = 255;
 
 void print_lexems (NODE** lexem_arr, int counter) {
-    for(int i = 0; i < counter; i++) {
-        printf("\ndata - %d\n", lexem_arr[i]->data);
+    op_new(&lexem_arr[counter + 1], OPERATION, END_COMAND);
+    
+    for(int i = 0; i < counter + 1; i++) {
+        //printf("\ndata - %d\n", lexem_arr[i]->data);
         
         if((lexem_arr[i])->arg_type == NUMBER) {
             printf("%d", lexem_arr[i]->data);
@@ -35,13 +37,14 @@ void print_lexems (NODE** lexem_arr, int counter) {
                 return;
                 break;
             default:
-                printf("Syntax error\n");
+                printf("Syntax error - %d\n", lexem_arr[i]->data);
                 break;
             }
         } else if((lexem_arr[i])->arg_type == VAR) {
             printf(" X ");
         }
     }
+    printf("\n");
 }
 
 static void skip_spaces(BUFFER* buffer) {
@@ -114,6 +117,17 @@ static NODE* get_var(BUFFER* buffer) {
     return ret_node;
 }
 
+static NODE* get_end(BUFFER* buffer) {
+    NODE* ret_node = nullptr;
+
+    if(buffer->string[buffer->ptr] == '\0') {
+        op_new(&ret_node, OPERATION, END_COMAND);
+        buffer->ptr++;
+    }
+
+    return ret_node;
+}
+
 
 
 NODE** lexem_analys(BUFFER* buffer, int* counter) {
@@ -135,12 +149,19 @@ NODE** lexem_analys(BUFFER* buffer, int* counter) {
             i++;
         else if((LEXEM_ARR[i] = get_var(buffer)) != nullptr)
             i++;
+        else if((LEXEM_ARR[i] = get_end(buffer)) != nullptr)
+            i++;
         else {
             printf("Syntaxis error\n");
             break;
         }
     }
-    op_new(&LEXEM_ARR[i + 1], OPERATION, END_COMAND);
+
+    NODE* end_node = nullptr;
+    op_new(&end_node, OPERATION, END_COMAND);
+
+    LEXEM_ARR[i] = end_node;
+
     *counter = i;
 
     return LEXEM_ARR;
@@ -149,8 +170,9 @@ NODE** lexem_analys(BUFFER* buffer, int* counter) {
 
 NODE* Get_N(LEXEM_ARR* arr) {
     if(arr->lexem_arr[arr->ptr]->arg_type == NUMBER) {
+        printf("Number - %d\n", arr->lexem_arr[arr->ptr]->data);
         arr->ptr++;
-        return arr->lexem_arr[arr->ptr];
+        return arr->lexem_arr[arr->ptr - 1];
     } else 
         return nullptr;
     
@@ -158,26 +180,32 @@ NODE* Get_N(LEXEM_ARR* arr) {
 
 NODE* Get_E(LEXEM_ARR* arr) {
     NODE* node1 = Get_T(arr);
+    printf("NODE1 data - %d\n", node1->data);
 
     while(arr->lexem_arr[arr->ptr]->arg_type == OPERATION && (arr->lexem_arr[arr->ptr]->data == ADD_COMAND || arr->lexem_arr[arr->ptr]->data == SUP_COMAND)) {
         arr->ptr++;
 
+        printf("%d\n", arr->lexem_arr[arr->ptr - 1]->data);
+
         NODE* node2 = Get_T(arr);
 
-        switch (arr->lexem_arr[arr->ptr]->data)
+        printf("NODE2 data - %d\n", node2->data);
+
+        switch (arr->lexem_arr[arr->ptr - 2]->data)
         {
         case ADD_COMAND:
-            arr->lexem_arr[arr->ptr]->left = node1;
-            arr->lexem_arr[arr->ptr]->right = node2;
-            node1 = arr->lexem_arr[arr->ptr];
+            printf("+\n");
+            arr->lexem_arr[arr->ptr - 2]->left = node1;
+            arr->lexem_arr[arr->ptr - 2]->right = node2;
+            node1 = arr->lexem_arr[arr->ptr - 2];
             break;
         case SUP_COMAND:
-            arr->lexem_arr[arr->ptr]->left = node1;
-            arr->lexem_arr[arr->ptr]->right = node2;
-            node1 = arr->lexem_arr[arr->ptr];
+            printf("-\n");
+            arr->lexem_arr[arr->ptr - 2]->left = node1;
+            arr->lexem_arr[arr->ptr - 2]->right = node2;
+            node1 = arr->lexem_arr[arr->ptr - 2];
             break;
         default:
-            printf("Syntax_err\n");
             break;
         }
     }
@@ -219,20 +247,20 @@ NODE* Get_T(LEXEM_ARR* arr) {
 
         NODE* node2 = Get_P(arr);
 
-        switch (arr->lexem_arr[arr->ptr]->data)
+        switch (arr->lexem_arr[arr->ptr - 2]->data)
         {
         case ADD_COMAND:
-            arr->lexem_arr[arr->ptr]->left = node1;
-            arr->lexem_arr[arr->ptr]->right = node2;
-            node1 = arr->lexem_arr[arr->ptr];
+            arr->lexem_arr[arr->ptr - 2]->left = node1;
+            arr->lexem_arr[arr->ptr - 2]->right = node2;
+            node1 = arr->lexem_arr[arr->ptr - 2];
             break;
         case SUP_COMAND:
-            arr->lexem_arr[arr->ptr]->left = node1;
-            arr->lexem_arr[arr->ptr]->right = node2;
-            node1 = arr->lexem_arr[arr->ptr];
+            arr->lexem_arr[arr->ptr - 2]->left = node1;
+            arr->lexem_arr[arr->ptr - 2]->right = node2;
+            node1 = arr->lexem_arr[arr->ptr - 2];
             break;
         default:
-            printf("Syntax_err\n");
+            printf("Syntax err - %d\n", arr->lexem_arr[arr->ptr]->data);
             break;
         }
     }
